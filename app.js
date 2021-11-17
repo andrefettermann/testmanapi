@@ -3,11 +3,16 @@ const express = require('express');// inicializar app express
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const request = require('request');
+const cors = require('cors');
+
+require('dotenv').config();
 
 const app = express();
 let port = 5000;// servidor á escuta no porto 5000
 
-// 'process.env.port': caso usemos Heroku
+app.use(cors());
+
+  // 'process.env.port': caso usemos Heroku
 app.listen(process.env.port || port, () => {
     console.log('Servidor em execução na porta: ' + port);
 });
@@ -15,12 +20,14 @@ app.listen(process.env.port || port, () => {
 /**
  * Middlewares
  */
-
+/*
  app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
+*/
 
 // este middleware deve estar acima das routes-handlers!
 app.use(bodyParser.json());
@@ -47,11 +54,12 @@ app.use(function (err, req, res, next) {
  */
 
 // Ligar á B.D.: 'test'->user da BD, ´nnn´->pass
-mongoose.connect('mongodb+srv://afett:admin@cluster0.gurgx.mongodb.net/testman?retryWrites=true&w=majority');
+//mongoose.connect('mongodb+srv://afett:admin@cluster0.gurgx.mongodb.net/testman?retryWrites=true&w=majority');
+mongoose.connect(process.env.DB_URL);
 
 // Confirma ligação na consola
 mongoose.connection.on('connected', function () {
-    console.log('Connected to Database ' + 'testman');
+    console.log('Connected to Database ' + process.env.DB_NAME);
 });
 
 // Mensagem de Erro

@@ -4,11 +4,17 @@ exports.test = function (req, res) {
     res.send('Olá! Teste ao Controller');
 };
 
-exports.listProjects = function (req, res, next) {
+exports.listProjects = async function (req, res, next) {
     projectModel.find().then(async docs => {
         res.send({ docs });
     }).catch(next);
 };
+
+exports.getProject = async (req, res, next) => {
+    projectModel.findOne({ _id: req.params.id }).then(doc => {
+        res.send(doc);
+    })
+}
 
 exports.insertProject = function (req, res, next) {
     const doc = {
@@ -37,7 +43,7 @@ exports.updateProject = function (req, res, next) {
 };
 
 exports.deleteProject = function (req, res, next) {
-    projectModelModel.findByIdAndRemove({ _id: req.params.id }).then(function (doc) {
+    projectModel.findByIdAndRemove({ _id: req.params.id }).then(function (doc) {
         res.setHeader('Access-Control-Allow-Origin', '*');
         res.send(doc);
     }).catch(next);

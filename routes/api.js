@@ -9,6 +9,8 @@ const apiController = require('../controllers/apiController');
 // url para POST será: http://localhost:5000/api/testcase
 router.get('/projects', apiController.listProjects);
 
+router.get('/project/:id', apiController.getProject);
+
 //
 router.post('/project', apiController.insertProject);
 
